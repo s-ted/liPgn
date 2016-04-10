@@ -51,7 +51,7 @@
       (let [games (lichess/username->games url
                                            username
                                            last-game-timestamp)]
-        (-> (str "Found " (count games) " new games.\n")
+        (-> (str "Found " (count games) " new games.\nCrunching data, this may take a while...\n")
             color/blue
             console/print-err)
 
