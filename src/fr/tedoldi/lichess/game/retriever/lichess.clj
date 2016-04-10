@@ -49,7 +49,7 @@
     (catch Exception e
       (if (= 429 (:status (ex-data e)))
         (do
-          (-> (str "Lichess is rate-limiting us, waiting 30s...")
+          (-> (str "Lichess is rate-limiting us, waiting 30s...\n")
               color/cyan
               console/print-err)
           (Thread/sleep 30000)
