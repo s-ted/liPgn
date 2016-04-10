@@ -50,8 +50,10 @@
 
       (let [games (lichess/username->games url
                                            username
-                                           last-game-timestamp)]
-        (-> (str "Found " (count games) " new games.\nCrunching data, this may take a while...\n")
+                                           last-game-timestamp)
+            total (count games)
+            counter (atom 0)]
+        (-> (str "Found " total " new games.\nCrunching data, this may take a while...\n")
             color/blue
             console/print-err)
 
@@ -60,7 +62,13 @@
                     dal/update!
                     dal/create-with-id!)]
             (f dal "game" id (assoc game
-                                    :userId username))))))))
+                                    :userId username))
+            (swap! counter inc)
+            (if (= (mod (deref counter) 500) 0)
+              (-> (str "Crunched " (deref counter) "/" total " games...\n")
+                  color/blue
+                  console/print-err))
+            ))))))
 
 (defn username->user [dal username]
   (dal/find-by-id dal "user" username))
